@@ -2,7 +2,8 @@
     <div>
         <v-container fluid>
             <v-layout row>
-                <v-flex xs12>
+                <v-flex xs10 offset-xs1>
+                    <v-icon large color="blue darken-2">mdi-mouse</v-icon>
                     <v-text-field id="testing" name="input-1" label="Label Text" hint="For example, flowers or used cars. Or a long text which might go on for quite a time and might need to wrap in an ideal world." persistent-hint></v-text-field>
                 </v-flex>
             </v-layout>
