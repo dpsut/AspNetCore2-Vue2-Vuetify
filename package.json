@@ -10,7 +10,6 @@
   "dependencies": {
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
-    "core-js": "^2.4.1",
     "font-awesome": "^4.6.3",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",

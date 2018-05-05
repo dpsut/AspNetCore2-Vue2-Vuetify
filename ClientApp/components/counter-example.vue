@@ -2,6 +2,19 @@
     <div>
         <v-container fluid>
             <v-layout row>
+                <v-flex xs12 sm8 md6>
+                    <v-select :items="states"
+                              v-model="selectedStates"
+                              label="Select"
+                              multiple
+                              max-height="400"
+                              hint="Pick your favorite states"
+                              item-value="id"
+                              item-text="label"
+                              persistent-hint></v-select>
+                </v-flex> 
+            </v-layout>
+            <v-layout row>
                 <v-flex xs10 offset-xs1>
                     <v-icon large color="blue darken-2">mdi-mouse</v-icon>
                     <v-text-field id="testing" name="input-1" label="Label Text" hint="For example, flowers or used cars. Or a long text which might go on for quite a time and might need to wrap in an ideal world." persistent-hint></v-text-field>
@@ -41,6 +54,14 @@
         data() {
             return {
                 autoCount: 0,
+                states: [
+                    { id: 1, label: 'S1' },
+                    { id: 2, label: 'S2' },
+                    { id: 3, label: 'S3' },
+                    { id: 4, label: 'S4' },
+                    { id: 5, label: 'S5' }
+                ],
+                selectedStates: []
             }
         },
 
