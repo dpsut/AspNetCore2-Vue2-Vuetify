@@ -4,14 +4,14 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const bundleOutputDir = './wwwroot/dist';
 
 module.exports = (env) => {
-    const isDevBuild = process.env.NODE_ENV != 'production';
+    const isDevBuild = !(env && env.prod) && process.env.NODE_ENV != 'production';
     return [{
         stats: { modules: false },
         entry: { 'main': './ClientApp/boot-app.js' },
         resolve: {
             extensions: ['.js', '.vue'],
             alias: {
-                'vue$': 'vue/dist/vue',
+                'vue$': 'vue/dist/vue.esm.js',
                 'components': path.resolve(__dirname, './ClientApp/components'),
                 'views': path.resolve(__dirname, './ClientApp/views'),
                 'utils': path.resolve(__dirname, './ClientApp/utils'),
@@ -45,6 +45,7 @@ module.exports = (env) => {
             })
         ] : [
                 // Plugins that apply in production builds only
+                new webpack.DefinePlugin({'process.env.NODE_ENV': JSON.stringify('production')}),
                 new webpack.optimize.UglifyJsPlugin({
                     mangle: true,
                     compress: {
