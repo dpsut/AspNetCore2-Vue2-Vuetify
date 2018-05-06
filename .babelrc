@@ -1,8 +1,17 @@
-﻿{
-  "presets": ["es2015", "stage-2"],
-  "plugins": [
-    "transform-runtime",
-    "transform-async-to-generator"
-  ],
-  "comments": false
+{
+    "presets": [
+        [
+            "env",
+            {
+                "modules": false,
+                "targets": {
+                    "browsers": [ "last 2 versions", "not ie <= 9" ]
+                }
+            }
+        ]
+    ],
+    "plugins": [
+        "syntax-dynamic-import",
+        "transform-object-rest-spread"
+    ]
 }
