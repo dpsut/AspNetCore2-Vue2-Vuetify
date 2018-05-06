@@ -46,12 +46,15 @@ module.exports = (env) => {
         ] : [
                 // Plugins that apply in production builds only
                 new webpack.optimize.UglifyJsPlugin({
-                    sourceMap: true,
+                    mangle: true,
                     compress: {
-                        warnings: false,
+                        warnings: false, // Suppress uglification warnings
                         screw_ie8: true
                     },
-                    mangle: false
+                    output: {
+                        comments: false,
+                    },
+                    exclude: [/\.min\.js$/gi] // skip pre-minified libs
                 }),
                 new ExtractTextPlugin('site.css')
             ])
