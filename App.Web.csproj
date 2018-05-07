@@ -13,10 +13,20 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Files not to show in IDE -->
+    <None Remove=".babelrc" />
+    <None Remove=".editorconfig" />
+    <None Remove=".eslintrc.js" />
+    <None Remove=".gitignore" />
+    <None Remove="LICENSE.md" />
+    <None Remove="README.md" />
     <None Remove="yarn.lock" />
 
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
     <Content Remove="ClientApp\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="global.json" />
+    <Content Remove="package-lock.json" />
   </ItemGroup>
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
