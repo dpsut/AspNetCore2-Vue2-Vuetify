@@ -1,17 +1,19 @@
 <template>
-    <div id="app" class="container-fluid">
-        <v-app>
-            <div class="row">
-                <div class="col-sm-3">
-                    <nav-menu params="route: route"></nav-menu>
-                </div>
-                <div class="col-sm-9">
-                    <router-view></router-view>
-                </div>
-            </div>
-        </v-app>
-    </div>
+    <v-app>
+        <v-toolbar>
+            <v-toolbar>
+                <v-toolbar-title>App</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <nav-menu params="route: route"></nav-menu>
+            </v-toolbar>
+        </v-toolbar>
 
+        <v-content>
+            <v-container fluid>
+                <router-view></router-view>
+            </v-container>
+        </v-content>
+    </v-app>
 </template>
 
 <script>
