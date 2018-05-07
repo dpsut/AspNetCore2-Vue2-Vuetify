@@ -1,14 +1,14 @@
 <template>
     <v-app>
         <v-toolbar>
-            <v-toolbar>
-                <v-toolbar-title>App</v-toolbar-title>
+            <v-toolbar app>
+                <v-toolbar-title class="hidden-xs-only">App</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <nav-menu params="route: route"></nav-menu>
             </v-toolbar>
         </v-toolbar>
 
-        <v-content>
+        <v-content class="pt-0">
             <v-container fluid>
                 <router-view></router-view>
             </v-container>

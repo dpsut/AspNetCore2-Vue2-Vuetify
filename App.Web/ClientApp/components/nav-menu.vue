@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar-items class="hidden-xs-and-down">
+    <v-toolbar-items>
         <v-btn flat :to="route.path" v-for="route in routes">
             <span :class="route.style"></span> {{ route.display }}
         </v-btn>
