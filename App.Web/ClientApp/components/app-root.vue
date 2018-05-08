@@ -19,12 +19,12 @@
 <script>
 import Vue from 'vue'
 import CounterExample from './counter-example'
-import FetchData from './fetch-data'
+import Login from './login'
 import HomePage from './home-page'
 import NavMenu from './nav-menu'
 
 Vue.component('counter-example', CounterExample);
-Vue.component('fetch-data', FetchData);
+Vue.component('login', Login);
 Vue.component('home-page', HomePage);
 Vue.component('nav-menu', NavMenu);
 

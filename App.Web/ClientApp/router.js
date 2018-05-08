@@ -10,4 +10,19 @@ let router = new VueRouter({
     routes
 })
 
+let isAdmin = false;
+let isAuthenticated = false;
+
+router.beforeEach((to, from, next) => {
+    if ((to.matched.some(record => record.meta.authGroup == 'adminUser') && !isAdmin) ||
+        (to.matched.some(record => record.meta.authGroup == 'authenticatedUser') && !isAuthenticated)) {
+        next({
+            path: '/login',
+            query: { redirect: to.fullPath }
+        })
+    } else {
+        next()
+    }
+})
+
 export default router
