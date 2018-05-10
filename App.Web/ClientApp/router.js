@@ -10,8 +10,8 @@ let router = new VueRouter({
     routes
 })
 
-let isAdmin = false;
-let isAuthenticated = false;
+let isAdmin = true;
+let isAuthenticated = true;
 
 router.beforeEach((to, from, next) => {
     if ((to.matched.some(record => record.meta.authGroup == 'adminUser') && !isAdmin) ||

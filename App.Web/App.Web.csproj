@@ -19,6 +19,7 @@
     <None Remove=".eslintrc.js" />
     <None Remove=".gitignore" />
     <None Remove="LICENSE.md" />
+    <None Remove="npm-debug.log" />
     <None Remove="README.md" />
     <None Remove="yarn.lock" />
 
