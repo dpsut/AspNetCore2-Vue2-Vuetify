@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-toolbar>
+        <v-toolbar v-if="authKey!=null">
             <v-toolbar app>
                 <v-toolbar-title class="hidden-xs-only">App</v-toolbar-title>
                 <v-spacer></v-spacer>
@@ -17,23 +17,29 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import CounterExample from './counter-example'
-import Login from './login'
-import HomePage from './home-page'
-import NavMenu from './nav-menu'
+    import Vue from 'vue'
+    import { mapActions, mapState } from 'vuex';
+    import CounterExample from './counter-example'
+    import Login from './login'
+    import HomePage from './home-page'
+    import NavMenu from './nav-menu'
 
-Vue.component('counter-example', CounterExample);
-Vue.component('login', Login);
-Vue.component('home-page', HomePage);
-Vue.component('nav-menu', NavMenu);
+    Vue.component('counter-example', CounterExample);
+    Vue.component('login', Login);
+    Vue.component('home-page', HomePage);
+    Vue.component('nav-menu', NavMenu);
 
-export default {
-    data() {
-        return {
-        }
+    export default {
+        data() {
+            return {
+            }
+        },
+        computed: {
+            ...mapState({
+                authKey: state => state.authKey
+            })
+        },
     }
-}
 </script>
 
 <style>

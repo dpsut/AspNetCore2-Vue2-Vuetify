@@ -1,9 +1,14 @@
 <template>
     <v-toolbar-items>
-        <v-btn flat :to="route.path" v-for="route in routes">
-            <span :class="route.style"></span> {{ route.display }}
+        <v-btn v-if="authKey=='user' || authKey=='admin'" flat exact to="/">
+            <span></span> {{ 'Home' }}
         </v-btn>
-        {{authKey}}
+        <v-btn v-if="authKey=='admin'" flat to="/counter">
+            <span></span> {{ 'Counter' }}
+        </v-btn>
+        <v-btn v-if="authKey!=null" flat @click="logout">
+            Logout
+        </v-btn>
     </v-toolbar-items>
 </template>
 
@@ -22,6 +27,13 @@
                 authKey: state => state.authKey
             })
         },
+        methods: {
+            ...mapActions(['setAuthKey']),
+            logout: function () {
+                this.setAuthKey({ authKey: null });
+                this.$router.push('/login')
+            }
+        }
     }
 </script>
 

@@ -1,9 +1,7 @@
 <template>
     <div>
         <h1>Login</h1>
-        <button @click="login">Login</button>
-        <button @click="logout">Logout</button>
-        {{authKey}}
+        <v-btn @click="login">Login</v-btn>
     </div>
 </template>
 
@@ -23,10 +21,8 @@
         methods: {
             ...mapActions(['setAuthKey']),
             login: function () {
-                this.setAuthKey({ authKey: "jsiaojasdo" });
-            },
-            logout: function () {
-                this.setAuthKey({ authKey: null });
+                this.setAuthKey({ authKey: "admin" });
+                this.$router.push('/')
             }
         }
     }
