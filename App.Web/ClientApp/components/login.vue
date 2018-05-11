@@ -1,7 +1,7 @@
 <template>
     <v-layout align-center justify-center>
         <v-flex xs12 sm8 md4 class="mt-5">
-            <v-card class="elevation-12">
+            <v-card>
                 <v-toolbar dark color="primary">
                     <v-toolbar-title>Login</v-toolbar-title>
                     <v-spacer></v-spacer>
