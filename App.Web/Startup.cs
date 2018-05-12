@@ -98,9 +98,6 @@ namespace App.Web
             {
                 await roleManager.CreateAsync(new IdentityRole("admin"));
             }
-
-            var user = await userManager.FindByEmailAsync("dpskato@gmail.com");
-            await userManager.AddToRoleAsync(user, "admin");
         }
     }
 }
