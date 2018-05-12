@@ -8,11 +8,13 @@
     "install": "webpack --config webpack.config.vendor.js"
   },
   "dependencies": {
-    "axios": "^0.17.1",
+    "axios": "^0.18.0",
+    "axios-progress-bar": "^1.1.8",
     "babel-polyfill": "^6.26.0",
     "font-awesome": "^4.6.3",
     "stylus": "^0.54.5",
     "vue": "^2.5.16",
+    "vue-axios": "^2.1.1",
     "vue-router": "^3.0.1",
     "vuetify": "^1.0.17",
     "vuex": "^3.0.1",

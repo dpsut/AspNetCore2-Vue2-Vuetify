@@ -7,8 +7,8 @@
                     <v-spacer></v-spacer>
                 </v-toolbar>
                 <v-card-text>
-                    <v-text-field prepend-icon="email" name="login" label="Login" type="text" autocomplete="off"></v-text-field>
-                    <v-text-field id="password" prepend-icon="lock" name="password" label="Password" type="password" autocomplete="off"></v-text-field>
+                    <v-text-field v-model="credentials.email" prepend-icon="email" name="login" label="Login" type="text" autocomplete="off"></v-text-field>
+                    <v-text-field v-model="credentials.password" id="password" prepend-icon="lock" name="password" label="Password" type="password" autocomplete="off"></v-text-field>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -25,6 +25,10 @@
     export default {
         data() {
             return {
+                credentials: {
+                    email: "",
+                    password: ""
+                }
             }
         },
         computed: {
@@ -35,8 +39,16 @@
         methods: {
             ...mapActions(['setAuthKey']),
             login: function () {
-                this.setAuthKey({ authKey: "admin" });
-                this.$router.push('/')
+                this.$http.post('/Account/Login', this.credentials)
+                    .then((result) => {
+                        this.setAuthKey({ authKey: result.data });
+                        this.$router.push('/')
+                    })
+                    .catch((error) => {
+                        //TODO:
+                        alert('login failed');
+                    });
+              
             }
         }
     }

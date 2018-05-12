@@ -65,7 +65,8 @@ namespace test
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
+                              IServiceProvider services)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -83,6 +84,23 @@ namespace test
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+
+            CreateUserRoles(services).Wait();
+        }
+
+        private async Task CreateUserRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
+
+            var roleCheck = await roleManager.RoleExistsAsync("admin");
+            if (!roleCheck)
+            {
+                await roleManager.CreateAsync(new IdentityRole("admin"));
+            }
+
+            var user = await userManager.FindByEmailAsync("dpskato@gmail.com");
+            await userManager.AddToRoleAsync(user, "admin");
         }
     }
 }

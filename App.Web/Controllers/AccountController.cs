@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,34 +36,31 @@ namespace App.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            if (ModelState.IsValid)
-            {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
-                if (result.Succeeded) return await GetToken(model);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                return BadRequest(model);
-            }
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
+            if (result.Succeeded) return await GetToken(model);
 
-            return BadRequest(ModelState);
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+
+            return BadRequest(model);
         }
 
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            if (ModelState.IsValid)
-            {
-                var user = new AppUser {UserName = model.Email, Email = model.Email};
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, false);
-                    return Ok(user);
-                }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-                AddErrors(result);
+            var user = new AppUser {UserName = model.Email, Email = model.Email};
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, false);
+                return Ok(user);
             }
+
+            AddErrors(result);
 
             return BadRequest(ModelState);
         }
@@ -87,35 +86,41 @@ namespace App.Web.Controllers
         private async Task<IActionResult> GetToken(LoginModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user != null)
+            if (user == null) return BadRequest();
+
+            var result = await _signInManager.CheckPasswordSignInAsync
+                (user, model.Password, false);
+                
+            if (!result.Succeeded) return Unauthorized();
+
+            var claims = new List<Claim>
             {
-                var result = await _signInManager.CheckPasswordSignInAsync
-                    (user, model.Password, false);
+                new Claim(JwtRegisteredClaimNames.Sub, model.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
 
-                if (!result.Succeeded) return Unauthorized();
+            var roles = await _userManager.GetRolesAsync(user);
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
-                var claims = new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, model.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                };
+            var token = new JwtSecurityToken
+            (
+                _configuration["Token:Issuer"],
+                _configuration["Token:Audience"],
+                claims,
+                expires: DateTime.UtcNow.AddDays(60),
+                notBefore: DateTime.UtcNow,
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey
+                        (Encoding.UTF8.GetBytes(_configuration["Token:Key"])),
+                    SecurityAlgorithms.HmacSha256)
+            );
 
-                var token = new JwtSecurityToken
-                (
-                    _configuration["Token:Issuer"],
-                    _configuration["Token:Audience"],
-                    claims,
-                    expires: DateTime.UtcNow.AddDays(60),
-                    notBefore: DateTime.UtcNow,
-                    signingCredentials: new SigningCredentials(new SymmetricSecurityKey
-                            (Encoding.UTF8.GetBytes(_configuration["Token:Key"])),
-                        SecurityAlgorithms.HmacSha256)
-                );
+            var clientAuthKey = new
+            {
+                Roles = roles,
+                Token = new JwtSecurityTokenHandler().WriteToken(token)
+            };
 
-                return Ok(new JwtSecurityTokenHandler().WriteToken(token));
-            }
-
-            return BadRequest();
+            return Ok(clientAuthKey);
         }
     }
 }

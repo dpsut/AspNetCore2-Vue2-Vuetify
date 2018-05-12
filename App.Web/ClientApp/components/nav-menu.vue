@@ -1,9 +1,9 @@
 <template>
     <v-toolbar-items>
-        <v-btn v-if="authKey=='user' || authKey=='admin'" flat exact to="/">
+        <v-btn v-if="authKey!=null" flat exact to="/">
             <span></span> {{ 'Home' }}
         </v-btn>
-        <v-btn v-if="authKey=='admin'" flat to="/counter">
+        <v-btn v-if="authKey.roles.includes('admin')" flat to="/counter">
             <span></span> {{ 'Counter' }}
         </v-btn>
         <v-btn v-if="authKey!=null" flat @click="logout">
@@ -30,6 +30,7 @@
         methods: {
             ...mapActions(['setAuthKey']),
             logout: function () {
+                //TODO: invalidate token on server
                 this.setAuthKey({ authKey: null });
                 this.$router.push('/login')
             }
