@@ -39,32 +39,36 @@ namespace App.Web.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
-            if (result.Succeeded) return await GetToken(model);
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return BadRequest();
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+            if (result.Succeeded) return await GetToken(model, user);
 
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
 
             return BadRequest(model);
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+        //TODO: disable until make it work without the cookie signin
+        //[HttpPost]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        //{
+        //    if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var user = new AppUser {UserName = model.Email, Email = model.Email};
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                await _signInManager.SignInAsync(user, false);
-                return Ok(user);
-            }
+        //    var user = new AppUser {UserName = model.Email, Email = model.Email};
+        //    var result = await _userManager.CreateAsync(user, model.Password);
+        //    if (result.Succeeded)
+        //    {
+        //        await _signInManager.SignInAsync(user, false);
+        //        return Ok(user);
+        //    }
 
-            AddErrors(result);
+        //    AddErrors(result);
 
-            return BadRequest(ModelState);
-        }
+        //    return BadRequest(ModelState);
+        //}
 
         [HttpGet]
         public IActionResult GetSecuredData()
@@ -91,11 +95,8 @@ namespace App.Web.Controllers
             foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
         }
 
-        private async Task<IActionResult> GetToken(LoginModel model)
+        private async Task<IActionResult> GetToken(LoginModel model, AppUser user)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null) return BadRequest();
-
             var result = await _signInManager.CheckPasswordSignInAsync
                 (user, model.Password, false);
                 
