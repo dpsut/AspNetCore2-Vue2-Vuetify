@@ -16,6 +16,7 @@ const state = {
 const mutations = {
     [AUTH_KEY](state, obj) {
         state.authKey = obj.authKey;
+        Vue.axios.defaults.headers.common["Authorization"] = (state.authKey ? ("Bearer " + state.authKey.token) : "");
     }
 };
 

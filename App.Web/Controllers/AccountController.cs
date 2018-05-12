@@ -119,7 +119,7 @@ namespace App.Web.Controllers
                 Roles = roles,
                 Token = new JwtSecurityTokenHandler().WriteToken(token)
             };
-
+            
             return Ok(clientAuthKey);
         }
     }

@@ -30,9 +30,11 @@
         methods: {
             ...mapActions(['setAuthKey']),
             logout: function () {
-                //TODO: invalidate token on server
-                this.setAuthKey({ authKey: null });
-                this.$router.push('/login')
+                this.$http.post('/Account/Logout')
+                    .then((result) => {
+                        this.setAuthKey({ authKey: null });
+                        this.$router.push('/login');
+                    })
             }
         }
     }
