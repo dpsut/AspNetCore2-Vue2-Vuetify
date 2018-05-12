@@ -7,12 +7,21 @@
                     <v-spacer></v-spacer>
                 </v-toolbar>
                 <v-card-text>
-                    <v-text-field v-model="credentials.email" @keyup.enter="login" prepend-icon="email" name="login" label="Login" type="text" autocomplete="off"></v-text-field>
-                    <v-text-field v-model="credentials.password" @keyup.enter="login" id="password" prepend-icon="lock" name="password" label="Password" type="password" autocomplete="off"></v-text-field>
+                    <v-text-field v-model.lazy="credentials.email" @keyup.enter="login" data-vv-validate-on="blur"
+                                  v-validate="'required|email'" data-vv-as="email address" data-vv-name="credentials.email" required
+                                  :error-messages="errors.collect('credentials.email')"
+                                  prepend-icon="email" name="email" label="Email" type="text" autocomplete="off"></v-text-field>
+                    <v-text-field v-model.lazy="credentials.password" @keyup.enter="login" data-vv-validate-on="blur"
+                                  v-validate="'required|max:30'" data-vv-as="password" data-vv-name="credentials.password" required
+                                  :error-messages="errors.collect('credentials.password')"
+                                  id="password" prepend-icon="lock" name="password" label="Password" type="password" autocomplete="off"></v-text-field>
+                    <v-alert :value="loginFailed" outline color="error" icon="warning">
+                        You have entered an invalid email or password
+                    </v-alert>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn @click="login" color="primary">Login</v-btn>
+                    <v-btn @click="login" :loading="isLoggingIn" :disabled="isLoggingIn" color="primary">Login</v-btn>
                 </v-card-actions>
             </v-card>
         </v-flex>
@@ -28,7 +37,9 @@
                 credentials: {
                     email: "",
                     password: ""
-                }
+                },
+                isLoggingIn: false,
+                loginFailed: false
             }
         },
         computed: {
@@ -39,16 +50,22 @@
         methods: {
             ...mapActions(['setAuthKey']),
             login: function () {
-                this.$http.post('/Account/Login', this.credentials)
-                    .then((result) => {
-                        this.setAuthKey({ authKey: result.data });
-                        this.$router.push('/')
-                    })
-                    .catch((error) => {
-                        //TODO:
-                        alert('login failed');
-                    });
-              
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        this.isLoggingIn = true;
+                        this.$http.post('/Account/Login', this.credentials)
+                            .then((result) => {
+                                this.setAuthKey({ authKey: result.data });
+                                this.$router.push('/')
+                                this.isLoggingIn = false;
+                                this.loginFailed = false;
+                            })
+                            .catch((error) => {
+                                this.loginFailed = true;
+                                this.isLoggingIn = false;
+                            });
+                    }
+                });
             }
         }
     }

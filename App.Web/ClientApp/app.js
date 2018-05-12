@@ -8,10 +8,12 @@ import { sync } from "vuex-router-sync"
 import App from "components/app-root"
 import "./stylus/main.styl";
 import Vuetify from "vuetify";
+import VeeValidate from 'vee-validate';
 
 loadProgressBar();
 Vue.use(VueAxios, axios);
 Vue.use(Vuetify);
+Vue.use(VeeValidate);
 sync(store, router);
 
 axios.interceptors.response.use(function (response) {
