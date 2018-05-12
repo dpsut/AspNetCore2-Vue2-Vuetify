@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -76,6 +77,13 @@ namespace App.Web.Controllers
         {
             await _signInManager.SignOutAsync();
             return Ok("Logged out");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied(string returnUrl = null)
+        {
+            return Forbid();
         }
 
         private void AddErrors(IdentityResult result)

@@ -15,7 +15,7 @@
                 </v-flex> 
             </v-layout>
             <v-layout row>
-                <v-flex xs10 offset-xs1>
+                <v-flex xs10>
                     <v-icon large color="blue darken-2">mdi-mouse</v-icon>
                     <v-text-field id="testing" name="input-1" label="Label Text" hint="For example, flowers or used cars. Or a long text which might go on for quite a time and might need to wrap in an ideal world." persistent-hint></v-text-field>
                 </v-flex>
@@ -44,6 +44,12 @@
                     <v-text-field name="input-3" label="Label Text" value="Input text" disabled></v-text-field>
                 </v-flex>
             </v-layout>
+            <v-btn @click="refreshData">Refresh admin only data</v-btn>
+            <ul>
+                <li v-for="forecast in forecasts">
+                    {{ forecast.temperatureC }}
+                </li>
+            </ul>
         </v-container>
     </div>
 </template>
@@ -51,7 +57,6 @@
     export default {
         data() {
             return {
-                autoCount: 0,
                 states: [
                     { id: 1, label: 'S1' },
                     { id: 2, label: 'S2' },
@@ -59,20 +64,21 @@
                     { id: 4, label: 'S4' },
                     { id: 5, label: 'S5' }
                 ],
-                selectedStates: []
+                selectedStates: [],
+                forecasts: []
             }
         },
-
         computed: {
         },
-
         methods: {
+            refreshData: function () {
+                this.$http.get('/Admin/WeatherForecasts')
+                    .then((result) => {
+                        this.forecasts = result.data;
+                    })
+            }
         },
-
         created() {
-            setInterval(() => {
-                this.autoCount += 1
-            }, 1000)
         }
     }
 </script>

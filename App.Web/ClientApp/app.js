@@ -14,6 +14,17 @@ Vue.use(VueAxios, axios);
 Vue.use(Vuetify);
 sync(store, router);
 
+axios.interceptors.response.use(function (response) {
+    return response;
+}, function (error) {
+    if (error.response.status === 403) {
+        store.state.authKey = null;
+        router.push("/login");
+    } else {
+        return Promise.reject(error);
+    }
+});
+
 const app = new Vue({
     store,
     router,
