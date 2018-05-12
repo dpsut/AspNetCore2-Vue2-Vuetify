@@ -10,8 +10,7 @@ let router = new VueRouter({
 router.beforeEach((to, from, next) => {
     if ((to.matched.some(record => record.meta.authGroup == "anonymousUser") && store.state.authKey)) {
         next({
-            path: "/",
-            query: { redirect: to.fullPath }
+            path: "/"
         });
 
         return;
@@ -20,8 +19,7 @@ router.beforeEach((to, from, next) => {
     if ((to.matched.some(record => record.meta.authGroup == "adminUser") && (!store.state.authKey || !store.state.authKey.roles.includes("admin"))) ||
         (to.matched.some(record => record.meta.authGroup == "authenticatedUser") && !store.state.authKey)) {
         next({
-            path: "/login",
-            query: { redirect: to.fullPath }
+            path: "/login"
         });
     } else {
         next();
