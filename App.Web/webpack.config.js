@@ -30,7 +30,8 @@ module.exports = (env) => {
                 { test: /\.js$/, include: /ClientApp/, use: 'babel-loader' },
                 { test: /\.css$/, use: ['style-loader', 'css-loader'] },
                 { test: /\.styl$/, use: ['style-loader', 'css-loader', 'stylus-loader'] },
-                { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' }
+                { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
+                { test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/, use: 'file-loader' }
             ]
         },
         plugins: [
