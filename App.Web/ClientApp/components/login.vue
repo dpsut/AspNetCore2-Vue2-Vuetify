@@ -7,10 +7,8 @@
                     <v-spacer></v-spacer>
                 </v-toolbar>
                 <v-card-text>
-                    <v-form>
-                        <v-text-field prepend-icon="email" name="login" label="Login" type="text"></v-text-field>
-                        <v-text-field id="password" prepend-icon="lock" name="password" label="Password" type="password"></v-text-field>
-                    </v-form>
+                    <v-text-field prepend-icon="email" name="login" label="Login" type="text" autocomplete="off"></v-text-field>
+                    <v-text-field id="password" prepend-icon="lock" name="password" label="Password" type="password" autocomplete="off"></v-text-field>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>

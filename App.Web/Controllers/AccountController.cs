@@ -18,11 +18,12 @@ namespace App.Web.Controllers
     [Produces("application/json")]
     public class AccountController : Controller
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -35,16 +36,11 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: true, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    return await GetToken(model);
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return BadRequest(model);
-                }
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
+                if (result.Succeeded) return await GetToken(model);
+
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return BadRequest(model);
             }
 
             return BadRequest(ModelState);
@@ -56,13 +52,14 @@ namespace App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new AppUser { UserName = model.Email, Email = model.Email };
+                var user = new AppUser {UserName = model.Email, Email = model.Email};
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    await _signInManager.SignInAsync(user, false);
                     return Ok(user);
                 }
+
                 AddErrors(result);
             }
 
@@ -84,10 +81,7 @@ namespace App.Web.Controllers
 
         private void AddErrors(IdentityResult result)
         {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
+            foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
         }
 
         private async Task<IActionResult> GetToken(LoginModel model)
@@ -95,39 +89,33 @@ namespace App.Web.Controllers
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null)
             {
-
                 var result = await _signInManager.CheckPasswordSignInAsync
-                                (user, model.Password, lockoutOnFailure: false);
+                    (user, model.Password, false);
 
-                if (!result.Succeeded)
-                {
-                    return Unauthorized();
-                }
+                if (!result.Succeeded) return Unauthorized();
 
                 var claims = new[]
                 {
-                        new Claim(JwtRegisteredClaimNames.Sub, model.Email),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                    };
+                    new Claim(JwtRegisteredClaimNames.Sub, model.Email),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                };
 
                 var token = new JwtSecurityToken
                 (
-                    issuer: _configuration["Token:Issuer"],
-                    audience: _configuration["Token:Audience"],
-                    claims: claims,
+                    _configuration["Token:Issuer"],
+                    _configuration["Token:Audience"],
+                    claims,
                     expires: DateTime.UtcNow.AddDays(60),
                     notBefore: DateTime.UtcNow,
                     signingCredentials: new SigningCredentials(new SymmetricSecurityKey
-                                (Encoding.UTF8.GetBytes(_configuration["Token:Key"])),
-                            SecurityAlgorithms.HmacSha256)
+                            (Encoding.UTF8.GetBytes(_configuration["Token:Key"])),
+                        SecurityAlgorithms.HmacSha256)
                 );
 
                 return Ok(new JwtSecurityTokenHandler().WriteToken(token));
             }
-            else
-            {
-                return BadRequest();
-            }
+
+            return BadRequest();
         }
     }
 }
