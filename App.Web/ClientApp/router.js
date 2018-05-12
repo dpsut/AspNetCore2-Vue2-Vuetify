@@ -4,7 +4,6 @@ import store from "./store/index";
 import { routes } from "./routes"
 
 let router = new VueRouter({
-    mode: "history",
     routes
 });
 
@@ -18,7 +17,7 @@ router.beforeEach((to, from, next) => {
         return;
     }
 
-    if ((to.matched.some(record => record.meta.authGroup == "adminUser") && !store.state.authKey.roles.includes("admin")) ||
+    if ((to.matched.some(record => record.meta.authGroup == "adminUser") && (!store.state.authKey || !store.state.authKey.roles.includes("admin"))) ||
         (to.matched.some(record => record.meta.authGroup == "authenticatedUser") && !store.state.authKey)) {
         next({
             path: "/login",

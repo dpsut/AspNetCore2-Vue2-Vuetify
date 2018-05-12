@@ -17,7 +17,7 @@ sync(store, router);
 axios.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
-    if (error.response.status === 403) {
+    if (error.response.status === 403 || error.response.status === 401) {
         store.state.authKey = null;
         router.push("/login");
     } else {
