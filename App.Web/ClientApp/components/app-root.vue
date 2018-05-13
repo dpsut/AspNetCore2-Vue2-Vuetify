@@ -9,7 +9,7 @@
         </v-toolbar>
 
         <v-content class="pt-0">
-            <v-container fluid>
+            <v-container> <!-- 'fluid' here breaks IE11-->
                 <router-view></router-view>
             </v-container>
         </v-content>

@@ -7,14 +7,16 @@
                     <v-spacer></v-spacer>
                 </v-toolbar>
                 <v-card-text>
-                    <v-text-field v-model.lazy="credentials.email" @keyup.enter="login" data-vv-validate-on="blur"
-                                  v-validate="'required|email'" data-vv-as="email address" data-vv-name="credentials.email" required
-                                  :error-messages="errors.collect('credentials.email')"
-                                  prepend-icon="email" name="email" label="Email" type="text" autocomplete="off"></v-text-field>
-                    <v-text-field v-model.lazy="credentials.password" @keyup.enter="login" data-vv-validate-on="blur"
-                                  v-validate="'required|max:30'" data-vv-as="password" data-vv-name="credentials.password" required
-                                  :error-messages="errors.collect('credentials.password')"
-                                  id="password" prepend-icon="lock" name="password" label="Password" type="password" autocomplete="off"></v-text-field>
+                    <v-form>
+                        <v-text-field v-model.lazy="credentials.email" @keyup.enter="login" data-vv-validate-on="blur"
+                                      v-validate="'required|email'" data-vv-as="email address" data-vv-name="credentials.email" required
+                                      :error-messages="errors.collect('credentials.email')"
+                                      prepend-icon="email" name="email" label="Email" type="text"></v-text-field>
+                        <v-text-field v-model.lazy="credentials.password" @keyup.enter="login" data-vv-validate-on="blur"
+                                      v-validate="'required|max:30'" data-vv-as="password" data-vv-name="credentials.password" required
+                                      :error-messages="errors.collect('credentials.password')"
+                                      id="password" prepend-icon="lock" name="password" label="Password" type="password"></v-text-field>
+                    </v-form>
                     <v-alert :value="loginFailed" outline color="error" icon="warning">
                         You have entered an invalid email or password
                     </v-alert>
