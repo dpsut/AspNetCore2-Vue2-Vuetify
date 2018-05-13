@@ -13,18 +13,25 @@
         </v-stepper-header>
         <v-stepper-items>
             <v-stepper-content step="1">
-                <v-card color="blue-grey lighten-5" class="mx-5 px-5 pt-3">
+                <p class="mx-5 px-5 pt-3">
                     <user-agreement></user-agreement>
-                </v-card>
+                </p>
                 <p class="text-xs-right mr-5 mt-3">
-                    <v-btn color="primary" @click.native="e1 = 2">Continue</v-btn>
-                    <v-btn flat>Cancel</v-btn>
+                    <v-btn color="primary" @click.native="e1 = 2">
+                        Next<v-icon right>arrow_forward</v-icon>
+                    </v-btn>
                 </p>
             </v-stepper-content>
             <v-stepper-content step="2">
                 <v-card color="grey lighten-1" class="mb-5"></v-card>
-                <v-btn color="primary" @click.native="e1 = 3">Continue</v-btn>
-                <v-btn flat>Cancel</v-btn>
+                <p class="text-xs-right mr-5 mt-3">
+                    <v-btn color="default" @click.native="e1 = 1">
+                        <v-icon left>arrow_back</v-icon>Back
+                    </v-btn>
+                    <v-btn color="primary" @click.native="e1 = 3">
+                        Next<v-icon right>arrow_forward</v-icon>
+                    </v-btn>
+                </p>
             </v-stepper-content>
             <v-stepper-content step="3">
                 <v-card color="grey lighten-1" class="mb-5"></v-card>
