@@ -12,7 +12,7 @@
     "axios-progress-bar": "^1.1.8",
     "babel-polyfill": "^6.26.0",
     "font-awesome": "^4.6.3",
-    "material-design-icons-iconfont": "^3.0.3",
+    "material-icons-base64": "^1.1.5",
     "stylus": "^0.54.5",
     "vee-validate": "^2.0.9",
     "vue": "^2.5.16",
