@@ -13,22 +13,26 @@
         </v-stepper-header>
         <v-stepper-items>
             <v-stepper-content step="1">
-                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
-                <v-btn color="primary" @click.native="e1 = 2">Continue</v-btn>
-                <v-btn flat>Cancel</v-btn>
+                <v-card color="blue-grey lighten-5" class="mx-5 px-5 pt-3">
+                    <user-agreement></user-agreement>
+                </v-card>
+                <p class="text-xs-right mr-5 mt-3">
+                    <v-btn color="primary" @click.native="e1 = 2">Continue</v-btn>
+                    <v-btn flat>Cancel</v-btn>
+                </p>
             </v-stepper-content>
             <v-stepper-content step="2">
-                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+                <v-card color="grey lighten-1" class="mb-5"></v-card>
                 <v-btn color="primary" @click.native="e1 = 3">Continue</v-btn>
                 <v-btn flat>Cancel</v-btn>
             </v-stepper-content>
             <v-stepper-content step="3">
-                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+                <v-card color="grey lighten-1" class="mb-5"></v-card>
                 <v-btn color="primary" @click.native="e1 = 4">Continue</v-btn>
                 <v-btn flat>Cancel</v-btn>
             </v-stepper-content>
             <v-stepper-content step="4">
-                <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+                <v-card color="grey lighten-1" class="mb-5"></v-card>
                 <v-btn color="primary" @click.native="e1 = 5">Continue</v-btn>
                 <v-btn flat>Cancel</v-btn>
             </v-stepper-content>
@@ -42,13 +46,18 @@
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            e1: 0
-        }
-    },
-}
+    import userAgreement from "./survey/user-agreement";
+
+    export default {
+        components: {
+            userAgreement
+        },
+        data() {
+            return {
+                e1: 0
+            }
+        },
+    }
 </script>
 
 <style>
