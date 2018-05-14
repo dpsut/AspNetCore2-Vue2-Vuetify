@@ -22,11 +22,10 @@
                             </v-btn>
                         </p>
                     </v-flex>
-
                 </v-stepper-content>
                 <v-stepper-content step="2">
-                    <v-card color="grey lighten-1" class="mb-5"></v-card>
-                    <p class="text-xs-right mr-5 mt-3">
+                    <company-details></company-details>
+                    <p class="text-xs-right">
                         <v-btn color="default" @click.native="e1 = 1">
                             <v-icon left>arrow_back</v-icon>Back
                         </v-btn>
@@ -57,10 +56,11 @@
 
 <script>
     import userAgreement from "./survey/user-agreement";
+    import companyDetails from "./survey/company-details";
 
     export default {
         components: {
-            userAgreement
+            userAgreement, companyDetails
         },
         data() {
             return {
